@@ -45,16 +45,16 @@ const QuestionDetail = ({ isQuestionLoading, question, getQuestionDetail }: Ques
         <Loading />
       ) : (
         <Grid gridTemplateColumns={['auto', 'auto', 'auto', 'auto']}>
-          {isSuccess === true && <Alert type='success'>Oylama Başarılı</Alert>}
-          {isSuccess === false && <Alert type='error'>Hata gerçekleşti</Alert>}
           {question?.choices.map((item, index) => (
             <CardStyled key={`question-${index}`} hasShadowAnimation onClick={() => vote(item.url)}>
-              <CardBody style={{ display: 'flex', justifyContent: "space-between" }}>
+              <CardBody style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>{item.choice}</span>
                 <span>Oy Sayısı: {item.votes}</span>
               </CardBody>
             </CardStyled>
           ))}
+          {isSuccess === true && <Alert type='success'>Oylama Başarılı</Alert>}
+          {isSuccess === false && <Alert type='error'>Hata gerçekleşti</Alert>}
         </Grid>
       )}
     </>

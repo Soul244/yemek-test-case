@@ -1,10 +1,67 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 import Container from 'components/Container';
-
+import { Input, Button, Textarea, FormGroup, Label } from 'components/FormElements';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Grid from 'components/Grid';
+import axios from 'axiosInstance';
+import Alert from 'components/Alert';
 
 const NewQuestion: NextPage = () => {
+  const router = useRouter();
+  const [question, setQuestion] = useState<string>('');
+  const [choices, setChoices] = useState<string[]>(['']);
+  const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+
+  const addChoice = () => {
+    setChoices([...choices, '']);
+  };
+
+  const removeChoice = (index: number) => {
+    const newChoices = [...choices];
+    newChoices.splice(index, 1);
+    setChoices(newChoices);
+  };
+
+  const handleChoiceChange = (index: number, value: string) => {
+    const newChoices = [...choices];
+    newChoices[index] = value;
+    setChoices(newChoices);
+  };
+
+  const submitQuestion = async (event: any) => {
+    try {
+      event.preventDefault();
+      setIsSuccess(null);
+      setValidationErrors([]);
+
+      if (!question) {
+        setValidationErrors(prevState=>([...prevState, 'Soru boş bırakılamaz']));
+      }
+      if (choices.length < 2) {
+        setValidationErrors(prevState=>([...prevState, 'En az 2 seçenek olmalıdır']));
+      }
+      if (validationErrors.length) {
+        setIsSuccess(false);
+        return;
+      }
+      const data = {
+        question,
+        choices,
+      };
+      await axios.post('questions?page=1', data);
+      setIsSuccess(true);
+      setQuestion('');
+      setChoices(['']);
+    } catch (error) {
+      setIsSuccess(false);
+    }
+  };
+
   return (
     <div>
       <Head>
@@ -14,7 +71,45 @@ const NewQuestion: NextPage = () => {
       </Head>
       <main>
         <Container>
-          Selam
+          <Button type='button' onClick={() => router.back()}>
+            <FontAwesomeIcon icon='arrow-left' style={{ marginRight: '0.5rem' }}></FontAwesomeIcon>
+            Geri Dön
+          </Button>
+          <form onSubmit={submitQuestion}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h1>Yeni Soru Ekle</h1>
+              <Button type='submit'>Soruyu Ekle</Button>
+            </div>
+            {isSuccess === true && <Alert type='success'>Soru eklendi</Alert>}
+            {isSuccess === false && !validationErrors.length && <Alert type='error'>Hata gerçekleşti</Alert>}
+            {isSuccess === false &&
+              validationErrors.length &&
+              validationErrors.map((validationError, index) => (
+                <Alert key={`error-${index}`} type='warning'>
+                  {validationError}
+                </Alert>
+              ))}
+            <FormGroup>
+              <Label htmlFor='question'>Soru Metni</Label>
+              <Textarea name='question' value={question} onChange={(e) => setQuestion(e.target.value)}></Textarea>
+            </FormGroup>
+            {choices.map((choice, index) => (
+              <FormGroup key={`choice-${index}`}>
+                <Label htmlFor={`choice-${index}`}>{index + 1}. Cevap</Label>
+                <Grid gridTemplateColumns={index !== 0 ? ['1fr auto', '1fr auto', '1fr auto'] : ['auto', 'auto', 'auto']}>
+                  <Input name={`choice-${index}`} type='text' value={choice} onChange={(e) => handleChoiceChange(index, e.target.value)} />
+                  {index !== 0 && (
+                    <Button type='button' onClick={() => removeChoice(index)}>
+                      <FontAwesomeIcon icon='times'></FontAwesomeIcon>
+                    </Button>
+                  )}
+                </Grid>
+              </FormGroup>
+            ))}
+            <Button onClick={addChoice} type='button' style={{ marginTop: '1rem' }}>
+              Yeni Cevap Ekle
+            </Button>
+          </form>
         </Container>
       </main>
     </div>

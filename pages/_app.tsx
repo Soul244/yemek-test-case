@@ -7,6 +7,7 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 const theme = {
   colors: {
     primary: '#be1f54',
+    primaryHover: '#c43565'
   }
 };
 

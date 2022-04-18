@@ -9,6 +9,7 @@ import axios from 'axiosInstance';
 import Container from 'components/Container';
 import QuestionDetail from 'containers/QuestionDetail';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from 'components/FormElements';
 
 const Question: NextPage = () => {
   const router = useRouter();
@@ -46,10 +47,10 @@ const Question: NextPage = () => {
       </Head>
       <main>
         <Container>
-          <button type='button' onClick={() => router.back()}>
-            <FontAwesomeIcon icon='arrow-left'></FontAwesomeIcon>
+          <Button type='button' onClick={() => router.back()}>
+            <FontAwesomeIcon icon='arrow-left' style={{ marginRight: "0.5rem" }}></FontAwesomeIcon>
             Geri Dön
-          </button>
+          </Button>
           <h1>{question?.question}</h1>
           <QuestionDetail isQuestionLoading={isLoading} question={question} getQuestionDetail={getQuestionDetail} />
         </Container>
