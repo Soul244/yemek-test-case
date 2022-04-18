@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
-
-type GridProps = {
+import PropTypes from 'prop-types'
+interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
   columnGap?: string;
   rowGap?: string;
   children?: any;
@@ -25,8 +24,8 @@ const GridStyled = styled.div`
   }
 `;
 
-function Grid({ columnGap, rowGap, gridTemplateColumns, children, ...rest }: GridProps) {
-  return <GridStyled columnGap={columnGap} rowGap={rowGap} gridTemplateColumns={gridTemplateColumns} {...rest}>{children}</GridStyled>;
+function Grid({ columnGap, rowGap, gridTemplateColumns, ...rest }: GridProps) {
+  return <GridStyled columnGap={columnGap} rowGap={rowGap} gridTemplateColumns={gridTemplateColumns} {...rest} />;
 }
 
 Grid.defaultProps = {

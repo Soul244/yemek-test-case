@@ -1,20 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
-
-type ContainerProps = {
-  children?: any;
-};
 
 const ContainerStyled = styled.div`
   position: relative;
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 20px;
   @media (min-width: 576px) {
     width: 85%;
-    padding: 0;
   }
   @media (min-width: 768px) {
     width: 80%;
@@ -24,12 +18,10 @@ const ContainerStyled = styled.div`
   }
 `;
 
-function Container({ children, ...rest }: ContainerProps) {
-  return <ContainerStyled {...rest}>{children}</ContainerStyled>;
+function Container(props: React.HTMLAttributes<HTMLDivElement>) {
+  return <ContainerStyled {...props}></ContainerStyled>;
 }
 
-Container.propTypes = {
-  children: PropTypes.node,
-};
+Container.propTypes = {};
 
 export default Container;

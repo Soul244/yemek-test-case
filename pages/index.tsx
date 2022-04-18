@@ -1,25 +1,11 @@
 import type { NextPage } from 'next';
-import Link from 'next/link';
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
 
-import { Question } from 'types';
-
-import axios from 'axiosInstance';
-import Card from 'components/Card';
-import Grid from 'components/Grid';
 import Container from 'components/Container';
+import Image from 'next/image';
+import QuestionList from 'containers/QuestionList';
 
 const Home: NextPage = () => {
-  const [questions, setQuestions] = useState<Question[]>([]);
-  useEffect(() => {
-    const getQuestions = async () => {
-      const { data } = await axios('questions?page=1');
-      setQuestions(data);
-    };
-    getQuestions();
-  }, []);
-
   return (
     <div>
       <Head>
@@ -29,16 +15,13 @@ const Home: NextPage = () => {
       </Head>
       <main>
         <Container>
-          <h1>Yemek.com Test Case</h1>
-          <Grid gridTemplateColumns={['auto', 'auto auto', 'auto auto auto', 'auto auto auto auto']}>
-            {questions.map((item, index) => (
-              <Link href={item.url}>
-                <a>
-                  <Card key={`question-${index}`}>{item.question}</Card>
-                </a>
-              </Link>
-            ))}
-          </Grid>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <span style={{ marginRight: "1rem" }}>
+              <Image src='/logo.svg' height={50} width={120} alt='yemek.com ikonu' priority />
+            </span>
+            <h1>Test Case</h1>
+          </div>
+          <QuestionList />
         </Container>
       </main>
     </div>
